@@ -9,26 +9,22 @@ from .forms import UserAdminCreationForm, UserAdminChangeForm
 from .models import User
 
 class UserAdmin(BaseUserAdmin):
-    # The forms to add and change user instances
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
 
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('email', 'admin','first_name','last_name',)
     list_filter = ('admin','staff',)
+    #list_display_links = ('email','first_name',)
+    list_editble = ('first_name',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('first_name','last_name')}),
-        ('Permissions', {'fields': ('admin',)}),
+        ('Permissions', {'fields': ('admin','staff','active',)}),
     )
-    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
-    # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('first_name','last_name','email', 'password1', 'password2','staff','active',)}
         ),
     )
     search_fields = ('email','first_name',)
@@ -42,3 +38,5 @@ admin.site.register(User, UserAdmin)
 
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
+admin.site.site_header = 'Custom Admin Pannel'
+admin.site.site_title = 'Custom Admin'
